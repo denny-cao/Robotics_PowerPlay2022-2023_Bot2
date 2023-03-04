@@ -39,6 +39,7 @@ public class MainTeleOp extends LinearOpMode {
     private int liftPosition;
 
     private final int[] LIFTPOSITIONS = new int[]{GROUND_JUNCTION_POSITION, LOW_JUNCTION_POSITION, MID_JUNCTION_POSITION, HIGH_JUNCTION_POSITION}; //MUST BE LEAST TO GREATEST
+    private boolean[] liftPositionsReached = {true, false, false, false};
 
     private Servo leftServo, rightServo;
 
@@ -87,31 +88,55 @@ public class MainTeleOp extends LinearOpMode {
         while(opModeIsActive()){
 
              if(driverController2.getButton(GamepadKeys.Button.Y) || driverController2.getButton(GamepadKeys.Button.A)){
-                 int distance = Math.abs(LIFTPOSITIONS[0] - liftPosition);
-                 int idx = 0;
-                 for(int c = 1; c < LIFTPOSITIONS.length; c++){
-                     int cdistance = Math.abs(LIFTPOSITIONS[c] - liftPosition);
-                     if(cdistance < distance){
-                         idx = c;
-                         distance = cdistance;
-                     }
+                 // Go up
+                 if (driverController2.getButton(GamepadKeys.Button.Y)){
+                    // Currently at ground junction
+                    if (liftPositionsReached[0]){
+                        liftPosition = LIFTPOSITIONS[1];
+                        liftPositionsReached[0] = false;
+                        liftPositionsReached[1] = true;
+                    }
+
+                    // Currently at low junction
+                    else if (liftPositionsReached[1]) {
+                        liftPosition = LIFTPOSITIONS[2];
+                        liftPositionsReached[1] = false;
+                        liftPositionsReached[2] = true;
+                    }
+
+                    // Currently at mid junction
+                    else if (liftPositionsReached[2]) {
+                        liftPosition = LIFTPOSITIONS[3];
+                        liftPositionsReached[2] = false;
+                        liftPositionsReached[3] = true;
+                    }
+
+                    // Currently at high junction = do nothing
                  }
-                 if (driverController2.getButton(GamepadKeys.Button.Y)) {
-                     if (idx == LIFTPOSITIONS.length -1){
-                         liftPosition = LIFTPOSITIONS[idx];
-                     }else if (LIFTPOSITIONS[idx] > liftPosition){
-                         liftPosition = LIFTPOSITIONS[idx];
-                     }else if (LIFTPOSITIONS[idx] < liftPosition){
-                         liftPosition = LIFTPOSITIONS[idx+1];
-                     }
-                 }else if(driverController2.getButton(GamepadKeys.Button.A)){
-                     if (idx == 0){
-                         liftPosition = LIFTPOSITIONS[0];
-                     }else if (LIFTPOSITIONS[idx] < liftPosition){
-                         liftPosition = LIFTPOSITIONS[idx];
-                     }else if (LIFTPOSITIONS[idx] > liftPosition){
-                         liftPosition = LIFTPOSITIONS[idx-1];
-                     }
+                 // Go down
+                 else {
+                    // Currently at ground junction = do nothing
+
+                    // Currently at low junction
+                    if (liftPositionsReached[1]){
+                        liftPosition = LIFTPOSITIONS[0];
+                        liftPositionsReached[1] = false;
+                        liftPositionsReached[0] = true;
+                    }
+
+                    // Currently at mid junction
+                    else if (liftPositionsReached[2]) {
+                        liftPosition = LIFTPOSITIONS[1];
+                        liftPositionsReached[2] = false;
+                        liftPositionsReached[1] = true;
+                    }
+
+                    // Currently at high junction
+                    else if (liftPositionsReached[3]) {
+                        liftPosition = LIFTPOSITIONS[2];
+                        liftPositionsReached[3] = false;
+                        liftPositionsReached[2] = true;
+                    }
                  }
             }else{
                  liftPosition += gamepad2.right_trigger * LIFT_MULTIPLIER;
