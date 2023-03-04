@@ -87,57 +87,22 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
 
-             if(driverController2.getButton(GamepadKeys.Button.Y) || driverController2.getButton(GamepadKeys.Button.A)){
-                 // Go up
-                 if (driverController2.getButton(GamepadKeys.Button.Y)){
-                    // Currently at ground junction
-                    if (liftPositionsReached[0]){
+             if(driverController2.getButton(GamepadKeys.Button.A) || driverController2.getButton(GamepadKeys.Button.Y) || driverController2.getButton(GamepadKeys.Button.X) || driverController2.getButton(GamepadKeys.Button.B)){
+                 if (driverController2.getButton(GamepadKeys.Button.A)){
+                     liftPosition = LIFTPOSITIONS[0];
+                 }
+
+                    if (driverController2.getButton(GamepadKeys.Button.X)){
                         liftPosition = LIFTPOSITIONS[1];
-                        liftPositionsReached[0] = false;
-                        liftPositionsReached[1] = true;
                     }
 
-                    // Currently at low junction
-                    else if (liftPositionsReached[1]) {
+                    if (driverController2.getButton(GamepadKeys.Button.Y)){
                         liftPosition = LIFTPOSITIONS[2];
-                        liftPositionsReached[1] = false;
-                        liftPositionsReached[2] = true;
                     }
 
-                    // Currently at mid junction
-                    else if (liftPositionsReached[2]) {
+                    if (driverController2.getButton(GamepadKeys.Button.B)){
                         liftPosition = LIFTPOSITIONS[3];
-                        liftPositionsReached[2] = false;
-                        liftPositionsReached[3] = true;
                     }
-
-                    // Currently at high junction = do nothing
-                 }
-                 // Go down
-                 else {
-                    // Currently at ground junction = do nothing
-
-                    // Currently at low junction
-                    if (liftPositionsReached[1]){
-                        liftPosition = LIFTPOSITIONS[0];
-                        liftPositionsReached[1] = false;
-                        liftPositionsReached[0] = true;
-                    }
-
-                    // Currently at mid junction
-                    else if (liftPositionsReached[2]) {
-                        liftPosition = LIFTPOSITIONS[1];
-                        liftPositionsReached[2] = false;
-                        liftPositionsReached[1] = true;
-                    }
-
-                    // Currently at high junction
-                    else if (liftPositionsReached[3]) {
-                        liftPosition = LIFTPOSITIONS[2];
-                        liftPositionsReached[3] = false;
-                        liftPositionsReached[2] = true;
-                    }
-                 }
             }else{
                  liftPosition += gamepad2.right_trigger * LIFT_MULTIPLIER;
                  liftPosition -= gamepad2.left_trigger * LIFT_MULTIPLIER;
