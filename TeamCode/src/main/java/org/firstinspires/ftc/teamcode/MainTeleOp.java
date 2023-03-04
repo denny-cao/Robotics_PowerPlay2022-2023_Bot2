@@ -39,7 +39,6 @@ public class MainTeleOp extends LinearOpMode {
     private int liftPosition;
 
     private final int[] LIFTPOSITIONS = new int[]{GROUND_JUNCTION_POSITION, LOW_JUNCTION_POSITION, MID_JUNCTION_POSITION, HIGH_JUNCTION_POSITION}; //MUST BE LEAST TO GREATEST
-    private boolean[] liftPositionsReached = {true, false, false, false};
 
     private Servo leftServo, rightServo;
 
